@@ -1,0 +1,27 @@
+Question 1 ->
+
+SELECT
+  DATE_TRUNC('day', block_date) AS day,
+  COUNT(*) AS transactions_per_day,
+  AVG(COUNT(*)) OVER () AS average_transactions_per_day
+FROM polygon.transactions
+GROUP BY 1
+ORDER BY 1 DESC
+LIMIT 10;
+
+Question 2 ->
+
+WITH holder_balances AS (
+  SELECT
+    og_to_name AS holder_address,
+    SUM(op_amount_decimal) AS total_op_held
+  FROM op_token_distributions_optimism.transfer_mapping
+  GROUP BY og_to_name
+)
+
+SELECT
+  holder_address,
+  total_op_held
+FROM holder_balances
+ORDER BY total_op_held DESC
+LIMIT 10;
